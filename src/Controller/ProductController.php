@@ -5,13 +5,14 @@ namespace App\Controller;
 use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 class ProductController extends AbstractController
 {
     /**
-     * @Route("/product", name="homepage")
+     * @Route("{_locale}/product", name="homepage")
      */
-    public function index()
+    public function index(Request $request)
     {
         //$user = $this->get('security.token_storage')->getToken()->getUser();
 //        $user=$this->getDoctrine()
@@ -20,6 +21,7 @@ class ProductController extends AbstractController
 //                'username'=>'Maksim'
 //            ]);
 //        dd($user);
+
         return $this->render('product/index.html.twig', [
             'product'=>'Test product',
             'city'=>'Minsk',

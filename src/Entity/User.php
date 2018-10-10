@@ -13,6 +13,14 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class User implements UserInterface
 {
+
+    /**
+     * @Assert\Locale(
+     *     canonicalize = true
+     * )
+     */
+    protected $locale;
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
