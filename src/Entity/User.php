@@ -60,6 +60,16 @@ class User implements UserInterface
      */
     private $roles;
 
+    /**
+     * @ORM\OneToOne(targetEntity="Image", mappedBy="user")
+     */
+    private $image;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Profile", mappedBy="user")
+     */
+    private $profile;
+
     public function __construct()
     {
         $this->roles = array('ROLE_USER');
@@ -110,6 +120,54 @@ class User implements UserInterface
     public function setPassword($password)
     {
         $this->password = $password;
+    }
+
+    /**
+     * Set image
+     *
+     * @param \App\Entity\Image $image
+     *
+     * @return User
+     */
+    public function setImage(Image $image = null)
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * Set image
+     *
+     * @param \App\Entity\Profile $profile
+     *
+     * @return User
+     */
+    public function setProfile(Profile $profile = null)
+    {
+        $this->profile = $profile;
+
+        return $this;
+    }
+
+    /**
+     * Get image
+     *
+     * @return \App\Entity\Profile
+     */
+    public function getProfile()
+    {
+        return $this->profile;
+    }
+
+    /**
+     * Get image
+     *
+     * @return \App\Entity\Image
+     */
+    public function getImage()
+    {
+        return $this->image;
     }
 
     public function getSalt()

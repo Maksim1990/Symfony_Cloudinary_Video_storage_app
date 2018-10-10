@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-10 col-sm-offset-1">
+                 <div class="col-xs-6 col-sm-6">
+                    <h4>Update profile image</h4>
+                    {% set  filter= app.session.get('user') %}
+                    {% if filter %}
+                        {% set profile_image_path = filter['profile_image_path'] %}
+                        <a href="{{ url('profile', {'id':app.user.id}) }}">
+                            <img src="{{ asset(profile_image_path) }}" class="w3-circle w3-margin-right"
+                                 style="width:100px;border-radius:0;margin-bottom: 30px;">
+                        </a>
+                    {% endif %}
+                    {{ form_start(formImage) }}
+                    {{ form_widget(formImage) }}
+                    {{ form_end(formImage) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

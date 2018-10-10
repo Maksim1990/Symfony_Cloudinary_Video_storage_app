@@ -3,21 +3,59 @@
 {% block title %}Profile{% endblock %}
 
 {% block body %}
-<div class="container">
-    <div class="row">
-    <div class="col-sm-10 col-sm-offset-1">
-        <h2>{{ user.username }}</h2>
-        <p class="pull-right"><a href="{{ path('update_profile',{'id':app.user.id}) }}">Edit</a></p>
-        <table class="table">
-            <tbody>
-            <tr>
-                <td>Email: </td>
-                <td>{{ user.email }}</td>
-            </tr>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-10 col-sm-offset-1">
+                <div class="col-sm-12 w3-center">
+                    <h2>{{ user.username }}</h2>
+                    {% set  filter= app.session.get('user') %}
+                    {% if filter %}
+                        {% set profile_image_path = filter['profile_image_path'] %}
+                        <a href="{{ url('profile', {'id':app.user.id}) }}">
+                            <img src="{{ asset(profile_image_path) }}" class="w3-circle w3-margin-right"
+                                 style="width:100px;border-radius:0;margin-bottom: 30px;">
+                        </a>
+                    {% endif %}
+                    <p><a class="btn btn-small btn-warning" href="{{ path('update_profile',{'id':app.user.id}) }}">Edit</a>
+                        <a class="btn btn-small btn-success" href="{{ path('update_image',{'id':app.user.id}) }}">Update image</a></p>
+                </div>
+                <div class="col-sm-12">
+                    <table class="w3-table-all w3-hoverable">
+                        <tbody>
+                        <tr>
+                            <td>Email:</td>
+                            <td>{{ user.email }}</td>
+                        </tr>
+                        <tr>
+                            <td>Country:</td>
+                            <td>{{ user.profile.country }}</td>
+                        </tr>
+                        <tr>
+                            <td>City:</td>
+                            <td>{{ user.profile.city }}</td>
+                        </tr>
+                        <tr>
+                            <td>Phone:</td>
+                            <td>{{ user.profile.phone }}</td>
+                        </tr>
+                        <tr>
+                            <td>Status:</td>
+                            <td>{{ user.profile.status }}</td>
+                        </tr>
+                        <tr>
+                            <td>Created at:</td>
+                            <td>{{ user.profile.createDate| date('Y-m-d H:i:s') }}</td>
+                        </tr>
+                        <tr>
+                            <td>Updated at:</td>
+                            <td>{{ user.profile.updateAt| date('Y-m-d H:i:s') }}</td>
+                        </tr>
 
-            </tbody>
-        </table>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
     </div>
-    </div>
-</div>
 {% endblock %}

@@ -10,6 +10,14 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  */
 class Profile
 {
+
+    /**
+     * @ORM\OneToOne(targetEntity="User", inversedBy="profile")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     */
+    private $user;
+
+
     /**
      * @var int
      *
@@ -248,7 +256,7 @@ class Profile
     }
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(name="updated_at",type="datetime")
      *
      * @var \DateTime
      */
@@ -273,7 +281,7 @@ class Profile
      *
      * @return \DateTime
      */
-    public function getUpdatedAt()
+    public function getupdateAt()
     {
         return $this->updatedAt;
     }
@@ -307,6 +315,30 @@ class Profile
     public function getCreateDate()
     {
         return $this->createDate;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \App\Entity\User $user
+     *
+     * @return Image
+     */
+    public function setUser(User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \App\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }
 
