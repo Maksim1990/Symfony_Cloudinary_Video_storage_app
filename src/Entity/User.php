@@ -72,6 +72,11 @@ class User implements UserInterface
         return $this->email;
     }
 
+    public function getId()
+    {
+        return $this->id;
+    }
+
     public function setEmail($email)
     {
         $this->email = $email;
