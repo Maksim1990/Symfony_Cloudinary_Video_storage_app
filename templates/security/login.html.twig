@@ -12,15 +12,15 @@
 <div class="example-wrapper">
     <h1>LOGIN PAGE</h1>
 
-    <a href="{{ path('logout') }}">Logout</a>
+
     {% if error %}
         <span class="error">{{ error.messageKey }}</span>
     {% endif %}
     <form action="{{ path('login') }}" method="POST">
-        <input type="text" name="_username" value="{{ last_username }}" placeholder="User name ....">
-        <input type="password" name="_password" >
+        <input type="text" name="_username" class="form-control" value="{{ last_username }}" placeholder="User name ....">
+        <input type="password" name="_password" class="form-control">
 
-        <button type="submit">Login</button>
+        <button type="submit" class="btn form-control btn-login btn-success">Login</button>
     </form>
 </div>
 {% endblock %}

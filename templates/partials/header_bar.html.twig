@@ -1,0 +1,16 @@
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Video Content APP</a>
+        </div>
+        <ul class="nav navbar-nav pull-right">
+            <li class="active"><a href="#">Home</a></li>
+            {% if is_granted("IS_AUTHENTICATED_FULLY") %}
+            <li><a href="{{ path('logout') }}">Logout</a></li>
+            {% else %}
+            <li><a href="{{ path('login') }}">Login</a></li>
+            <li><a href="{{ path('user_registration') }}">Register</a></li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
