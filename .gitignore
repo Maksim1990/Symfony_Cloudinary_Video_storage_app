@@ -2,9 +2,11 @@
 ###> symfony/framework-bundle ###
 /.env
 /public/bundles/
-/public/images/uploads/*
+/public/images/uploads/
+/public/images/
 /var/
 /vendor/
+/node_modules/
 /.idea
 ###< symfony/framework-bundle ###
 

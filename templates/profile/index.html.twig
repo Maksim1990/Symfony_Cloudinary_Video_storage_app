@@ -1,8 +1,18 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Profile{% endblock %}
-
+{% block stylesheets %}
+    <link href="http://vjs.zencdn.net/4.12/video-js.css" rel="stylesheet">
+    <script src="http://vjs.zencdn.net/4.12/video.js"></script>
+    <style type="text/css">
+        .vjs-default-skin { color: #e1d8d8; }
+        .vjs-default-skin .vjs-play-progress,
+        .vjs-default-skin .vjs-volume-level { background-color: #2c9237 }
+        .vjs-default-skin .vjs-control-bar { font-size: 139% }
+    </style>
+{% endblock %}
 {% block body %}
+
     <div class="container">
         <div class="row">
             <div class="col-sm-10 col-sm-offset-1">
@@ -53,10 +63,17 @@
 
                         </tbody>
                     </table>
-
+                    <video id="MY_VIDEO_1" class="video-js vjs-default-skin" controls
+                           preload="auto" width="640" height="264"
+                           data-setup="{}">
+                        <source src="{{ videoTest.url }}" type='video/mp4'>
+                        <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
+                    </video>
                     <img src="{{ url }}" alt="">
-                    <img src="{{ asset(image_url) }}" alt="">
+                    {#<img src="{{ asset(image_url) }}" alt="">#}
                     {{ video|raw }}
+
+
                     {#<video width="400" controls>#}
                         {#<source src="http://res.cloudinary.com/maksim1990/video/upload/v1536649342/samples/elephants.mp4" type="video/mp4">#}
                         {#Your browser does not support HTML5 video.#}

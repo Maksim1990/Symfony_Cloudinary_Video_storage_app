@@ -31,12 +31,11 @@ class ProfileController extends AbstractController
 
         $url=cloudinary_url("samples/cloudinary-group.jpg", array("width" => 100, "height" => 150, "crop" => "fill"));
         $video=cl_video_tag("samples/elephants",array("width" => 400,
-            "crop" => "pad", "background" => "gray",
-            "preload" => "none", "controls" => true,
-            "fallback_content" => "Your browser does not support HTML5 video tags"));
+            "preload" => "none",
+             "controls" => true));
 
         $package = new Package(new StaticVersionStrategy('v1'));
-        $image_upload=$package->getUrl('/images/cat.png');
+        $image_upload=$package->getUrl('/images/cat.jpg');
         $video_upload=$package->getUrl('/images/test.mp4');
 
 //        \Cloudinary\Uploader::upload(getcwd().str_replace("?v1","",$video_upload), array(
@@ -52,12 +51,12 @@ class ProfileController extends AbstractController
 
 
         //Upload image
-        \Cloudinary\Uploader::upload(getcwd().str_replace("?v1","",$image_upload),
-            array("folder" => "symfony2/",
-                "tag"=>"maksim",
-                "public_id" => "test2"));
-        $result = \Cloudinary\Uploader::add_tag('maksim', 'symfony2/test2', $options = array());
-        dd($result);
+//        \Cloudinary\Uploader::upload(getcwd().str_replace("?v1","",$image_upload),
+//            array("folder" => "symfony2/",
+//                "tag"=>"maksim",
+//                "public_id" => "test2"));
+//        $result = \Cloudinary\Uploader::add_tag('maksim', 'symfony2/test2', $options = array());
+//        dd($result);
 //        //Rename
 //        \Cloudinary\Uploader::rename('symfony/image_new', 'symfony/image_new555');
 
@@ -72,8 +71,10 @@ class ProfileController extends AbstractController
         //$api->subfolders("samples");
 
 
+
         //-- Default image
         //dd($api->resources(array("resource_type" => "video")));
+        $videoTest=$api->resource("/samples/elephants",array("resource_type" => "video"));
         //$api->delete_resources(array("symfony2/image_new777"));
         //dd($api->delete_resources_by_tag("maksim",array('folder'=>'symfony')));
 
@@ -87,10 +88,22 @@ class ProfileController extends AbstractController
             'user' => $user,
             'url' => $url,
             'video' => $video,
+            'videoTest' => $videoTest,
             'image_url' => $package->getUrl('/images/cat.png'),
         ]);
     }
 
+
+    /**
+     * @Route("{_locale}/content/{id}", name="content")
+     */
+    public function mediaContent($id, Request $request)
+    {
+        return $this->render('content/index.html.twig', [
+
+        ]);
+
+    }
     /**
      * @Route("{_locale}/update_image/{id}", name="update_image")
      */
