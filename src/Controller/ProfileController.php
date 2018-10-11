@@ -112,10 +112,10 @@ class ProfileController extends AbstractController
         $profile->setStatus($profile->getStatus());
 
         $form = $this->createFormBuilder($profile)
-            ->add('country', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom:15px;')))
-            ->add('city', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom:15px;')))
-            ->add('phone', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom:15px;')))
-            ->add('status', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom:15px;')))
+            ->add('country', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom:15px;'),'required'=>false))
+            ->add('city', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom:15px;'),'required'=>false))
+            ->add('phone', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom:15px;'),'required'=>false))
+            ->add('status', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom:15px;'),'required'=>false))
             ->add('submit', SubmitType::class, array('label' => 'Edit', 'attr' => array('class' => 'btn btn-primary', 'style' => 'margin-bottom:15px;')))
             ->getForm();
         $form->handleRequest($request);

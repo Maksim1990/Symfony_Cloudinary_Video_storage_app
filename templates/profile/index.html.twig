@@ -28,27 +28,27 @@
                         </tr>
                         <tr>
                             <td>Country:</td>
-                            <td>{{ user.profile.country }}</td>
+                            <td>{{ (user.profile and user.profile.country)?user.profile.country:"" }}</td>
                         </tr>
                         <tr>
                             <td>City:</td>
-                            <td>{{ user.profile.city }}</td>
+                            <td>{{ (user.profile and user.profile.city)?user.profile.city:"" }}</td>
                         </tr>
                         <tr>
                             <td>Phone:</td>
-                            <td>{{ user.profile.phone }}</td>
+                            <td>{{ (user.profile and user.profile.phone)?user.profile.phone:"" }}</td>
                         </tr>
                         <tr>
                             <td>Status:</td>
-                            <td>{{ user.profile.status }}</td>
+                            <td>{{ (user.profile and user.profile.status)?user.profile.status:"" }}</td>
                         </tr>
                         <tr>
                             <td>Created at:</td>
-                            <td>{{ user.profile.createDate| date('Y-m-d H:i:s') }}</td>
+                            <td>{{ (user.profile and user.profile.createDate)?user.profile.createDate| date('Y-m-d H:i:s'):"" }}</td>
                         </tr>
                         <tr>
                             <td>Updated at:</td>
-                            <td>{{ user.profile.updateAt| date('Y-m-d H:i:s') }}</td>
+                            <td>{{ (user.profile and user.profile.updateAt)?user.profile.updateAt| date('Y-m-d H:i:s'):"" }}</td>
                         </tr>
 
                         </tbody>
