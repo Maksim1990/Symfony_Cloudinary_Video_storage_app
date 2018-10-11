@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "2b49a9ce5790850fdcaf2df23b2e158e",
+    "content-hash": "c5f2f2de9e71145d36e9dceeee00888e",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -49,6 +49,58 @@
                 "transliterator"
             ],
             "time": "2017-04-04T11:38:05+00:00"
+        },
+        {
+            "name": "cloudinary/cloudinary_php",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/cloudinary/cloudinary_php.git",
+                "reference": "79ec9205b26a7b8c5462e23101fab2f9f6ad6c9f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cloudinary/cloudinary_php/zipball/79ec9205b26a7b8c5462e23101fab2f9f6ad6c9f",
+                "reference": "79ec9205b26a7b8c5462e23101fab2f9f6ad6c9f",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.8.*"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src"
+                ],
+                "files": [
+                    "src/Helpers.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Cloudinary",
+                    "homepage": "https://github.com/cloudinary/cloudinary_php/graphs/contributors"
+                }
+            ],
+            "description": "Cloudinary PHP SDK",
+            "homepage": "https://github.com/cloudinary/cloudinary_php",
+            "keywords": [
+                "cdn",
+                "cloud",
+                "cloudinary",
+                "image management",
+                "sdk"
+            ],
+            "time": "2018-10-08T14:16:06+00:00"
         },
         {
             "name": "composer/ca-bundle",
@@ -6259,7 +6311,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "cloudinary/cloudinary_php": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

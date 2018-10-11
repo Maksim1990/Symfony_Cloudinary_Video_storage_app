@@ -12,20 +12,82 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 
+use Symfony\Component\Asset\Package;
+use Symfony\Component\Asset\VersionStrategy\StaticVersionStrategy;
+
 class ProfileController extends AbstractController
 {
     /**
      * @Route("{_locale}/profile/{id}", name="profile")
      */
-    public function profile($id)
+    public function profile($id, Request $request)
     {
+
+        \Cloudinary::config([
+            "cloud_name" => getenv('CLOUD_NAME'),
+            'api_key' => getenv('API_KEY'),
+            "api_secret" =>  getenv('API_SECRET')
+        ]);
+
+        $url=cloudinary_url("samples/cloudinary-group.jpg", array("width" => 100, "height" => 150, "crop" => "fill"));
+        $video=cl_video_tag("samples/elephants",array("width" => 400,
+            "crop" => "pad", "background" => "gray",
+            "preload" => "none", "controls" => true,
+            "fallback_content" => "Your browser does not support HTML5 video tags"));
+
+        $package = new Package(new StaticVersionStrategy('v1'));
+        $image_upload=$package->getUrl('/images/cat.png');
+        $video_upload=$package->getUrl('/images/test.mp4');
+
+//        \Cloudinary\Uploader::upload(getcwd().str_replace("?v1","",$video_upload), array(
+//            "folder" => "symfony/",
+//            "public_id" => "video_test",
+//            "resource_type" => "video",
+//            "eager" => array(
+//                array("width" => 300, "height" => 300,
+//                    "crop" => "pad", "audio_codec" => "none"),
+//                array("width" => 160, "height" => 100,
+//                    "crop" => "crop", "gravity" => "south",
+//                    "audio_codec" => "none"))));
+
+
+        //Upload image
+        \Cloudinary\Uploader::upload(getcwd().str_replace("?v1","",$image_upload),
+            array("folder" => "symfony2/",
+                "tag"=>"maksim",
+                "public_id" => "test2"));
+        $result = \Cloudinary\Uploader::add_tag('maksim', 'symfony2/test2', $options = array());
+        dd($result);
+//        //Rename
+//        \Cloudinary\Uploader::rename('symfony/image_new', 'symfony/image_new555');
+
+
+        //delete
+        //\Cloudinary\Uploader::destroy('test');
+
+        $api = new \Cloudinary\Api();
+        //-- Get name of all root folders
+       //$api->root_folders();
+       //Get subfolders
+        //$api->subfolders("samples");
+
+
+        //-- Default image
+        //dd($api->resources(array("resource_type" => "video")));
+        //$api->delete_resources(array("symfony2/image_new777"));
+        //dd($api->delete_resources_by_tag("maksim",array('folder'=>'symfony')));
+
+        // dd($package->getUrl('/images/cat.png'));
         $user = $this->getDoctrine()
             ->getRepository(User::class)
             ->find($id);
 
 //        dd($user->getProfile());
         return $this->render('profile/index.html.twig', [
-            'user' => $user
+            'user' => $user,
+            'url' => $url,
+            'video' => $video,
+            'image_url' => $package->getUrl('/images/cat.png'),
         ]);
     }
 
