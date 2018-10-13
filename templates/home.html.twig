@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Home!{% endblock %}
+{% block stylesheets %}
+    <link href="https://fonts.googleapis.com/css?family=Acme" rel="stylesheet">
+    <style>
+        .title{
+            font-family: 'Acme', sans-serif;
+            font-size: 60px;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-10 col-sm-offset-1">
+                <div class="w3-display-container" style="height:300px; margin-top: 100px;">
+                    <div class="w3-display-middle title">
+                        <div>
+                            Video Content APP        
+                        </div>
+                        <div class="w3-center">
+                            <img src="{{ asset('images/includes/symfony.png') }}" width="200" alt="">
+                            <img src="{{ asset('images/includes/cloudinary.png') }}" width="200" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

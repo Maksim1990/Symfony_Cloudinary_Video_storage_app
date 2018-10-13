@@ -29,4 +29,15 @@ class SecurityController extends AbstractController
     public function logout(){
 
     }
+
+    /**
+     * @Route("/", name="home")
+     */
+    public function homepage()
+    {
+        return $this->render('home.html.twig', [
+
+        ]);
+    }
+
 }

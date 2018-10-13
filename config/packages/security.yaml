@@ -19,7 +19,7 @@ security:
                login_path: login
                check_path: login
                provider: login_provider
-               default_target_path: homepage
+               default_target_path: profile
             logout:
                path: /logout
                target: /
@@ -32,5 +32,5 @@ security:
          # - { path: ^/admin, roles: ROLE_ADMIN }
          - { path: '^/(en|fr|th|ru)/login$', roles: IS_AUTHENTICATED_ANONYMOUSLY }
          - { path: '^/(en|fr|th|ru)/register$', roles: IS_AUTHENTICATED_ANONYMOUSLY }
-         - { path: ^/(en|fr|th|ru)/, roles: IS_AUTHENTICATED_FULLY }
-         - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
+         - { path: ^/(en|fr|th|ru)/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+         - { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY }

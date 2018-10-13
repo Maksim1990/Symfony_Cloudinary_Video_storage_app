@@ -6,79 +6,23 @@ use App\Entity\Image;
 use App\Entity\Profile;
 use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 
-use Symfony\Component\Asset\Package;
-use Symfony\Component\Asset\VersionStrategy\StaticVersionStrategy;
-
 class ProfileController extends AbstractController
 {
     /**
-     * @Route("{_locale}/profile/{id}", name="profile")
+     * @Route("{_locale}/profile/{id?}", name="profile")
      */
-    public function profile($id, Request $request)
+    public function profile($id=0, Request $request)
     {
-
-        \Cloudinary::config([
-            "cloud_name" => getenv('CLOUD_NAME'),
-            'api_key' => getenv('API_KEY'),
-            "api_secret" => getenv('API_SECRET')
-        ]);
-
-        $url = cloudinary_url("samples/cloudinary-group.jpg", array("width" => 100, "height" => 150, "crop" => "fill"));
-        $video = cl_video_tag("samples/elephants", array("width" => 400,
-            "preload" => "none",
-            "controls" => true));
-
-        $package = new Package(new StaticVersionStrategy('v1'));
-        $image_upload = $package->getUrl('/images/cat.jpg');
-        $video_upload = $package->getUrl('/images/test.mp4');
-
-//        \Cloudinary\Uploader::upload(getcwd().str_replace("?v1","",$video_upload), array(
-//            "folder" => "symfony/",
-//            "public_id" => "video_test",
-//            "resource_type" => "video",
-//            "eager" => array(
-//                array("width" => 300, "height" => 300,
-//                    "crop" => "pad", "audio_codec" => "none"),
-//                array("width" => 160, "height" => 100,
-//                    "crop" => "crop", "gravity" => "south",
-//                    "audio_codec" => "none"))));
-
-
-        //Upload image
-//        \Cloudinary\Uploader::upload(getcwd().str_replace("?v1","",$image_upload),
-//            array("folder" => "symfony2/",
-//                "tag"=>"maksim",
-//                "public_id" => "test2"));
-//        $result = \Cloudinary\Uploader::add_tag('maksim', 'symfony2/test2', $options = array());
-//        dd($result);
-//        //Rename
-        //\Cloudinary\Uploader::rename('symfony/SampleVideo_1280x720_2mb', 'symfony/hrrrrrr',array("resource_type" => "video"));
-
-
-        //delete
-        //\Cloudinary\Uploader::destroy('test');
-
-        $api = new \Cloudinary\Api();
-        //-- Get name of all root folders
-        //$api->root_folders();
-        //Get subfolders
-        //$api->subfolders("samples");
-
-
-        //-- Default image
-        //dd($api->resources(array("resource_type" => "video")));
-        $videoTest = $api->resource("/samples/elephants", array("resource_type" => "video"));
-        //$api->delete_resources(array("symfony2/image_new777"));
-        //dd($api->delete_resources_by_tag("maksim",array('folder'=>'symfony')));
-
-        // dd($package->getUrl('/images/cat.png'));
+        if(empty($id)){
+            $user=$this->get('security.token_storage')->getToken()->getUser();
+            $id=$user->getId();
+        }
         $user = $this->getDoctrine()
             ->getRepository(User::class)
             ->find($id);
@@ -86,150 +30,6 @@ class ProfileController extends AbstractController
 //        dd($user->getProfile());
         return $this->render('profile/index.html.twig', [
             'user' => $user,
-            'url' => $url,
-            'video' => $video,
-            'videoTest' => $videoTest,
-            'image_url' => $package->getUrl('/images/cat.png'),
-        ]);
-    }
-
-
-    /**
-     * @Route("{_locale}/content/{id}", name="content")
-     */
-    public function mediaContent($id, Request $request)
-    {
-        \Cloudinary::config([
-            "cloud_name" => getenv('CLOUD_NAME'),
-            'api_key' => getenv('API_KEY'),
-            "api_secret" => getenv('API_SECRET')
-        ]);
-
-        $api = new \Cloudinary\Api();
-        $allVideos = $api->resources(array("resource_type" => "video"));
-        $allImages = $api->resources();
-        //dd($allVideos['resources']);
-        //dd($allImages['resources']);
-        $arrContent = array_merge($allImages['resources'], $allVideos['resources']);
-        //dd($arrContent);
-        return $this->render('content/index.html.twig', [
-            'content' => $arrContent
-        ]);
-    }
-
-    /**
-     * @Route("{_locale}/content/item/{type}/{id}/{format}", name="content_item")
-     */
-    public function showContentItem($type, $id, $format, Request $request)
-    {
-        \Cloudinary::config([
-            "cloud_name" => getenv('CLOUD_NAME'),
-            'api_key' => getenv('API_KEY'),
-            "api_secret" => getenv('API_SECRET')
-        ]);
-
-        $api = new \Cloudinary\Api();
-
-        switch ($type) {
-            case 'video':
-                $resource = $api->resource(urldecode($id), array("resource_type" => "video"));
-                break;
-            case 'image':
-                $resource = cloudinary_url(urldecode($id) . "." . $format, array("width" => 600));
-
-                break;
-            default:
-                $resource = null;
-        }
-
-        return $this->render('content/item.html.twig', [
-            'resource' => $resource,
-            'type' => $type,
-        ]);
-    }
-
-    /**
-     * @Route("{_locale}/content/upload/{type}", name="content_upload")
-     */
-    public function uploadActions($type, Request $request)
-    {
-
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        $image = new Image;
-        $form = $this->createFormBuilder($image)
-            ->add('imageFile', FileType::class, array('label' => 'Choose file', 'attr' => array('class' => 'form-control', 'style' => 'margin-bottom:15px;')))
-            ->add('imageType', ChoiceType::class, array('choices' => array(
-                'video' => 'video',
-                'image' => 'image',
-            ), 'label' => 'File type', 'data' => $type, 'attr' => array('class' => 'form-control', 'style' => 'margin-bottom:15px;')))
-            ->add('submit', SubmitType::class, array('label' => 'Upload', 'attr' => array('class' => 'btn btn-warning', 'style' => 'margin-bottom:15px;')))
-            ->getForm();
-
-        $form->handleRequest($request);
-
-
-        if ($form->isSubmitted() && $form->isValid()) {
-
-
-            //dd($formImage->isSubmitted()&& $formImage->isValid());
-            $imageFile = $form['imageFile']->getData();
-            $size = $imageFile->getClientSize();
-            if ($size < 10000000) {
-
-                $dir = 'images/cloudinary';
-                $imageFile->move($dir, $imageFile->getClientOriginalName());
-
-                \Cloudinary::config([
-                    "cloud_name" => getenv('CLOUD_NAME'),
-                    'api_key' => getenv('API_KEY'),
-                    "api_secret" => getenv('API_SECRET')
-                ]);
-                $package = new Package(new StaticVersionStrategy('v1'));
-                $file_upload = $package->getUrl('/' . $dir . '/' . $imageFile->getClientOriginalName());
-
-                //-- Remove extension from public_id in Cloudinary cloud
-                $fileName=explode('.',$imageFile->getClientOriginalName())[0];
-                if($type=='image'){
-                    //-- Upload image file
-                    $result=\Cloudinary\Uploader::upload(getcwd() . str_replace("?v1", "", $file_upload),
-                        array("folder" => "symfony/",
-                            "public_id" => $fileName));
-
-                }else{
-                    $result=\Cloudinary\Uploader::upload(getcwd() . str_replace("?v1", "", $file_upload), array(
-                        "folder" => "symfony/",
-                        "public_id" =>  $fileName,
-                        "resource_type" => "video",
-                        "eager" => array(
-                            array("width" => 300, "height" => 300,
-                                "crop" => "pad", "audio_codec" => "none"),
-                            array("width" => 160, "height" => 100,
-                                "crop" => "crop", "gravity" => "south",
-                                "audio_codec" => "none"))));
-
-                }
-                if($result){
-                    \Cloudinary\Uploader::add_tag('symfony_cloudinary', 'symfony/' . $imageFile->getClientOriginalName(), $options = array());
-
-                    //-- Remove file from server after uploading to Cloudinary cloud
-                    if (file_exists('images/cloudinary/' .$imageFile->getClientOriginalName())) {
-                        unlink('images/cloudinary/' . $imageFile->getClientOriginalName());
-                    }
-                }
-
-
-                return $this->redirectToRoute('content', ['id' => $user->getId()]);
-            } else {
-                $this->addFlash('notice', 'File size should not be more than 1.5 MB!');
-                return $this->render('content/upload.html.twig', array(
-                    'type' => $type,
-                    'form' => $form->createView()));
-            }
-        }
-
-        return $this->render('content/upload.html.twig', [
-            'type' => $type,
-            'form' => $form->createView()
         ]);
     }
 
