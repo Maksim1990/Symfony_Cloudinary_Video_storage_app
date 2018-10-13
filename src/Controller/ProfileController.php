@@ -59,7 +59,7 @@ class ProfileController extends AbstractController
 //        $result = \Cloudinary\Uploader::add_tag('maksim', 'symfony2/test2', $options = array());
 //        dd($result);
 //        //Rename
-//        \Cloudinary\Uploader::rename('symfony/image_new', 'symfony/image_new555');
+        //\Cloudinary\Uploader::rename('symfony/SampleVideo_1280x720_2mb', 'symfony/hrrrrrr',array("resource_type" => "video"));
 
 
         //delete
@@ -174,18 +174,7 @@ class ProfileController extends AbstractController
             //dd($formImage->isSubmitted()&& $formImage->isValid());
             $imageFile = $form['imageFile']->getData();
             $size = $imageFile->getClientSize();
-            if ($size < 2500000) {
-                //-- Delete old image
-                $em = $this->getDoctrine()->getManager();
-//                $imageDelete = $user->getImage();
-//
-//                if ($imageDelete) {
-//                    if (file_exists('images/cloudinary/' . $imageDelete->getImageName())) {
-//                        unlink('images/cloudinary/' . $imageDelete->getImageName());
-//                    }
-//                    $query = $em->createQuery('DELETE ' . Image::class . ' c WHERE c.id =' . $imageDelete->getId());
-//                    $query->execute();
-//                }
+            if ($size < 10000000) {
 
                 $dir = 'images/cloudinary';
                 $imageFile->move($dir, $imageFile->getClientOriginalName());
@@ -198,16 +187,18 @@ class ProfileController extends AbstractController
                 $package = new Package(new StaticVersionStrategy('v1'));
                 $file_upload = $package->getUrl('/' . $dir . '/' . $imageFile->getClientOriginalName());
 
+                //-- Remove extension from public_id in Cloudinary cloud
+                $fileName=explode('.',$imageFile->getClientOriginalName())[0];
                 if($type=='image'){
                     //-- Upload image file
                     $result=\Cloudinary\Uploader::upload(getcwd() . str_replace("?v1", "", $file_upload),
                         array("folder" => "symfony/",
-                            "public_id" => $imageFile->getClientOriginalName()));
+                            "public_id" => $fileName));
 
                 }else{
                     $result=\Cloudinary\Uploader::upload(getcwd() . str_replace("?v1", "", $file_upload), array(
                         "folder" => "symfony/",
-                        "public_id" =>  $imageFile->getClientOriginalName(),
+                        "public_id" =>  $fileName,
                         "resource_type" => "video",
                         "eager" => array(
                             array("width" => 300, "height" => 300,

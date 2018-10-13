@@ -14,6 +14,8 @@ class AppExtension extends AbstractExtension
             // the logic of this filter is now implemented in a different class
             new TwigFilter('price', array(AppRuntime::class, 'priceFilter')),
             new TwigFilter('id_format', array(AppRuntime::class, 'idFormat')),
+            new TwigFilter('file_name_format', array(AppRuntime::class, 'fileNameFormat')),
+            new TwigFilter('folder_format', array(AppRuntime::class, 'folderFormat')),
         );
     }
 }

@@ -25,4 +25,21 @@ class AppRuntime implements RuntimeExtensionInterface
 
         return $id;
     }
+
+    public function fileNameFormat($name)
+    {
+        $arrPath = explode('/',$name);
+        $name=$arrPath[count($arrPath)-1];
+
+        return $name;
+    }
+
+    public function folderFormat($name)
+    {
+        $arrPath = explode('/',$name);
+        unset($arrPath[count($arrPath)-1]);
+
+
+        return implode("/",$arrPath);
+    }
 }

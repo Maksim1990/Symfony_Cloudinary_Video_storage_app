@@ -4,20 +4,23 @@
 {% block stylesheets %}
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
 
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8"
+            src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
     <style>
         html {
-            height:100%;
-            background:url(https://www.engagewp.com/wp-content/uploads/2014/06/preloader.gif) center no-repeat;
+            height: 100%;
+            background: url(https://www.engagewp.com/wp-content/uploads/2014/06/preloader.gif) center no-repeat;
         }
+
         img {
-            max-width:100%;
+            max-width: 100%;
         }
+
         body {
-            height:100%;
-            background:white;
-            opacity:0;
-            transition:0.5s
+            height: 100%;
+            background: white;
+            opacity: 0;
+            transition: 0.5s
         }
     </style>
 {% endblock %}
@@ -31,40 +34,56 @@
                     <thead>
                     <tr>
                         <th>Name</th>
+                        <th>Folder</th>
                         <th>Format</th>
                         <th>Resource type</th>
                         <th>Created at</th>
                         <th>Size</th>
                         <th>Width</th>
                         <th>Height</th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
-                    {% for item in content %}
-                    <tr>
-                        <td>
-                            <a href="{{ path('content_item',{'type':item.resource_type,'id':item.public_id|id_format(2, ',', '.'),'format':item.format}) }}">
-                                {{ item.public_id }}
-                            </a>
-                        </td>
-                        <td>{{ item.format }}</td>
-                        <td>{{ item.resource_type }}</td>
-                        <td>{{ item.created_at }}</td>
-                        <td>{{ item.bytes }} bytes</td>
-                        <td>{{ item.width }}</td>
-                        <td>{{ item.height }}</td>
-                    </tr>
-                    {%  endfor %}
+                    {% for key,item in content %}
+                        <tr id="file_line_{{ key }}">
+                            <td>
+                                <a id="file_link_{{ key }}"
+                                   href="{{ path('content_item',{'type':item.resource_type,'id':item.public_id|id_format,'format':item.format}) }}">
+                                    <span id="file_name_{{ key }}">{{ item.public_id|file_name_format }}</span>
+                                </a>
+                                <input type="text" style="display: none;"
+                                       data-id="{{ item.public_id|id_format }}"
+                                       id="file_input_{{ key }}">
+                            </td>
+                            <td>{{ item.public_id|folder_format }}</td>
+                            <td>{{ item.format }}</td>
+                            <td id="file_type_{{ key }}">{{ item.resource_type }}</td>
+                            <td>{{ item.created_at }}</td>
+                            <td>{{ item.bytes }} bytes</td>
+                            <td>{{ item.width }}</td>
+                            <td>{{ item.height }}</td>
+                            <td>
+                                <a class="w3-text-green" id="file_edit_{{ key }}" href="#"><i class="fa fa-pencil"
+                                                                                              aria-hidden="true"></i></a><br>
+                                <a class="w3-text-red" id="file_delete_{{ key }}"
+                                   data-id="{{ item.public_id|id_format }}" href="#"><i
+                                            class="fa fa-trash-o" aria-hidden="true"></i></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
                     </tbody>
                     <tfoot>
                     <tr>
                         <th>Name</th>
+                        <th>Folder</th>
                         <th>Format</th>
                         <th>Resource type</th>
                         <th>Created at</th>
                         <th>Size</th>
                         <th>Width</th>
                         <th>Height</th>
+                        <th></th>
                     </tr>
                     </tfoot>
                 </table>
@@ -73,11 +92,79 @@
         </div>
     </div>
     <script>
-        window.onload= function() {
-            document.body.style.opacity="1"
+        window.onload = function () {
+            document.body.style.opacity = "1"
         };
-        $(document).ready( function () {
+        $(document).ready(function () {
             $('#table_id').DataTable();
-        } );
+        });
     </script>
+{% endblock %}
+{% block javascripts %}
+
+    {#<script>#}
+    {#{% for flash_message in app.session.flashbag.get('notice') %}#}
+    {#new Noty({#}
+    {#type: 'success',#}
+    {#layout: 'topRight',#}
+    {#text: '{{ flash_message }}'#}
+    {#}).show();#}
+    {#{% endfor %}#}
+    {#</script>#}
+    <script>
+
+
+        //-- Click delete button
+        $('a[id^="file_delete_"]').click(function () {
+            var id = $(this).attr('id').replace('file_delete_', '');
+            var public_id = $(this).data('id');
+
+        });
+
+        //-- Click edit button
+        $('a[id^="file_edit_"]').click(function () {
+            var id = $(this).attr('id').replace('file_edit_', '');
+            var file_name = $('#file_name_' + id).text();
+            $('#file_link_' + id).hide();
+            $('#file_input_' + id).val(file_name).show();
+        });
+
+        $('input[id^="file_input_"]').keydown(function (e) {
+            var id = $(this).attr('id').replace('file_input_', '');
+            var public_id = $(this).data('id');
+            var file_type = $('#file_input_'+id).text();
+
+            if (e.keyCode == 13) {
+                var new_value = $(this).val();
+
+               if(new_value!==''){
+                   $.ajax({
+                       url: '{{ (path('rename_file_ajax')) }}',
+                       type: "POST",
+                       dataType: "json",
+                       data: {
+                           "public_id": public_id,
+                           "new_value": new_value,
+                           "file_type": file_type
+                       }, beforeSend: function () {
+                           //-- Show loading image while execution of ajax request
+                           $("div#divLoading").addClass('show');
+                       },
+                       success: function (data) {
+                           if (data.output) {
+                               $('#file_input_'+id).hide();
+                               $('#file_name_' + id).text(new_value);
+                               $('#file_link_' + id).show();
+                           }
+                           //-- Hide loading image
+                           $("div#divLoading").removeClass('show');
+                       }
+                   });
+               }
+            }
+        });
+
+
+    </script>
+    {{ parent() }}
 {% endblock %}
