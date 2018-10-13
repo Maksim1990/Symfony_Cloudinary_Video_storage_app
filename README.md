@@ -17,7 +17,7 @@ composer install
 ### 4) Rename environment config file:
 ```
 cp .env.dist .env
-``
+```
 ### 5) In .env file fill in correct data for DATABASE_URL variable with relevant credentials data
 ### 6) Generate database that were specified in *DATABASE_URL* variable in *.env* file
 ```
