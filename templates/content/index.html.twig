@@ -56,8 +56,8 @@
                                        data-id="{{ item.public_id|id_format }}"
                                        id="file_input_{{ key }}">
                             </td>
-                            <td>{{ item.public_id|folder_format }}</td>
-                            <td>{{ item.format }}</td>
+                            <td id="file_folder_{{ key }}">{{ item.public_id|folder_format }}</td>
+                            <td id="file_format_{{ key }}">{{ item.format }}</td>
                             <td id="file_type_{{ key }}">{{ item.resource_type }}</td>
                             <td>{{ item.created_at }}</td>
                             <td>{{ item.bytes }} bytes</td>
@@ -132,11 +132,11 @@
         $('input[id^="file_input_"]').keydown(function (e) {
             var id = $(this).attr('id').replace('file_input_', '');
             var public_id = $(this).data('id');
-            var file_type = $('#file_input_'+id).text();
+            var file_type = $('#file_type_'+id).text();
+            var file_format = $('#file_format_'+id).text();
 
             if (e.keyCode == 13) {
                 var new_value = $(this).val();
-
                if(new_value!==''){
                    $.ajax({
                        url: '{{ (path('rename_file_ajax')) }}',
@@ -153,8 +153,20 @@
                        success: function (data) {
                            if (data.output) {
                                $('#file_input_'+id).hide();
+                               var file_folder=$('#file_folder_'+id).text();
                                $('#file_name_' + id).text(new_value);
-                               $('#file_link_' + id).show();
+
+                               new_value=encodeURIComponent(file_folder+"/"+new_value);
+                               new_value=new_value.replace(/\s/g, '');
+
+                               var route = "{{ path('content_item',{'type':'PLACEHOLDER_TYPE','id':"PLACEHOLDER_ID"|id_format,'format':'PLACEHOLDER_FORMAT'})|escape('js') }}";
+
+                               route=route.replace("PLACEHOLDER_ID",new_value)
+                                   .replace("PLACEHOLDER_TYPE",file_type)
+                                   .replace("PLACEHOLDER_FORMAT",file_format);
+                               route=route.replace("%2F", "%252F");
+                               $('#file_link_'+id).attr('href',route).show();
+
                            }
                            //-- Hide loading image
                            $("div#divLoading").removeClass('show');
