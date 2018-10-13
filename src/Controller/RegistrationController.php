@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Profile;
 use App\Form\UserType;
 use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -34,7 +35,6 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-
             //-- Autologin currently created user
             $token = new UsernamePasswordToken(
                 $user,
@@ -44,7 +44,20 @@ class RegistrationController extends AbstractController
             );
             $this->get('security.token_storage')->setToken($token);
 
-            return $this->redirectToRoute('homepage');
+
+            $user=$this->get('security.token_storage')->getToken()->getUser();
+            //Create Profile for newly registered user
+            $profile = new Profile;
+            $now=new\DateTime('now');
+            $profile->setUser($user);
+            $profile->setUpdatedAt($now);
+            $profile->setCreateDate($now);
+
+            $profile->setActive('Y');
+            $entityManager->persist($profile);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('home');
         }
 
         return $this->render(

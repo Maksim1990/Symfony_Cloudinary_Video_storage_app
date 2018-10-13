@@ -32,5 +32,5 @@ security:
          # - { path: ^/admin, roles: ROLE_ADMIN }
          - { path: '^/(en|fr|th|ru)/login$', roles: IS_AUTHENTICATED_ANONYMOUSLY }
          - { path: '^/(en|fr|th|ru)/register$', roles: IS_AUTHENTICATED_ANONYMOUSLY }
-         - { path: ^/(en|fr|th|ru)/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-         - { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+         - { path: ^/(en|fr|th|ru)/, roles: IS_AUTHENTICATED_FULLY }
+         - { path: ^/, roles: IS_AUTHENTICATED_FULLY }

@@ -4,7 +4,7 @@
             <a class="navbar-brand" href="#">Video Content APP</a>
         </div>
         <ul class="nav navbar-nav pull-right">
-            <li class="active"><a href="#">Home</a></li>
+            <li class="active"><a href="{{ path('home') }}">Home</a></li>
             {% if is_granted("IS_AUTHENTICATED_FULLY") %}
             <li><a href="{{ path('profile',{'id':app.user.id}) }}">Profile</a></li>
             <li><a href="{{ path('logout') }}">Logout</a></li>
