@@ -2,7 +2,7 @@
     "type": "project",
     "license": "proprietary",
     "require": {
-        "php": "^7.2.1",
+        "php": "^7.1.7",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "cloudinary/cloudinary_php": "dev-master",
@@ -27,6 +27,7 @@
         "symfony/validator": "*",
         "symfony/web-link": "*",
         "symfony/yaml": "*",
+        "twig/extensions": "^1.5",
         "vich/uploader-bundle": "^1.4"
     },
     "require-dev": {

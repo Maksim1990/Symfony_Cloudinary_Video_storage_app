@@ -99,11 +99,55 @@ class ProfileController extends AbstractController
      */
     public function mediaContent($id, Request $request)
     {
-        return $this->render('content/index.html.twig', [
-
+        \Cloudinary::config([
+            "cloud_name" => getenv('CLOUD_NAME'),
+            'api_key' => getenv('API_KEY'),
+            "api_secret" =>  getenv('API_SECRET')
         ]);
 
+        $api = new \Cloudinary\Api();
+        $allVideos=$api->resources(array("resource_type" => "video"));
+        $allImages=$api->resources();
+        //dd($allVideos['resources']);
+        //dd($allImages['resources']);
+        $arrContent=array_merge($allImages['resources'],$allVideos['resources']);
+        //dd($arrContent);
+        return $this->render('content/index.html.twig', [
+            'content'=>$arrContent
+        ]);
     }
+
+    /**
+     * @Route("{_locale}/content/item/{type}/{id}/{format}", name="content_item")
+     */
+    public function showContentItem($type,$id,$format, Request $request)
+    {
+        \Cloudinary::config([
+            "cloud_name" => getenv('CLOUD_NAME'),
+            'api_key' => getenv('API_KEY'),
+            "api_secret" =>  getenv('API_SECRET')
+        ]);
+
+        $api = new \Cloudinary\Api();
+
+        switch ($type){
+            case 'video':
+                $resource=$api->resource(urldecode($id),array("resource_type" => "video"));
+                break;
+            case 'image':
+                $resource=cloudinary_url(urldecode($id).".".$format, array("width" => 600));
+
+                break;
+            default:
+                $resource=null;
+        }
+
+        return $this->render('content/item.html.twig', [
+            'resource'=>$resource,
+            'type'=>$type,
+        ]);
+    }
+
     /**
      * @Route("{_locale}/update_image/{id}", name="update_image")
      */
