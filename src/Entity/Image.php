@@ -45,6 +45,13 @@ class Image
     private $imageSize;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="image_type", type="string", length=255)
+     */
+    private $imageType;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
@@ -109,6 +116,30 @@ class Image
     public function getImageSize()
     {
         return $this->imageSize;
+    }
+
+    /**
+     * Set imageType
+     *
+     * @param string $imageType
+     *
+     * @return Image
+     */
+    public function setImageType($imageType)
+    {
+        $this->imageType = $imageType;
+
+        return $this;
+    }
+
+    /**
+     * Get imageType
+     *
+     * @return string
+     */
+    public function getImageType()
+    {
+        return $this->imageType;
     }
 
     /**

@@ -25,8 +25,11 @@
                             <a class="btn btn-small btn-success" href="{{ path('update_image',{'id':app.user.id}) }}">Update image</a>
                         </div>
                         <div class="pull-right">
-                            <a class="btn btn-small btn-info" href="{{ path('content',{'id':app.user.id}) }}">Cloudinary content</a>
-                            <a class="btn btn-small btn-default" href="{{ path('content',{'id':app.user.id}) }}">Upload content to Cloudinary</a>
+                            <a class="btn btn-small btn-success" href="{{ path('content',{'id':app.user.id}) }}">Cloudinary content</a>
+                            <a class="btn btn-small btn-info" href="{{ path('content_upload',{'type':'video'}) }}">
+                                Upload video to Cloudinary</a>
+                            <a class="btn btn-small btn-info" href="{{ path('content_upload',{'type':'image'}) }}">
+                                Upload image to Cloudinary</a>
                         </div>
 
 

@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profile{% endblock %}
+{% block stylesheets %}
+
+{% endblock %}
+{% block body %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-10 col-sm-offset-1 w3-center">
+
+                <p>
+                    {{ form_start(form) }}
+                    {{ form_widget(form) }}
+                    {{ form_end(form) }}
+                    <a class="btn btn-small btn-success" href="{{ path('profile',{'id':app.user.id}) }}">Back to profile</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
