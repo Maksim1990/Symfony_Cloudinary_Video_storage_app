@@ -40,5 +40,5 @@ php bin/console doctrine:migrations:migrate
 ```
 php bin/console server:run
 ```
-### 11) Navigate in broweser to [http://127.0.0.1:8000](http://127.0.0.1:8000) and enjoy the project!
+### 11) Navigate in browser to [http://127.0.0.1:8000](http://127.0.0.1:8000) and enjoy the project!
 ---
