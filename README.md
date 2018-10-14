@@ -1,6 +1,10 @@
 # Symfony_Cloudinary_cloud_storage_app
 Symfony 4 and Cloudinary cloud storage app
 
+###### Detailed description of this project: http://web.discoveringworld.net/projects/symfony-cloudinary-api-video-storage-app/
+
+###### Check out also my other applications and works: http://web.discoveringworld.net
+
 ---
 ### 1) Clone current repository:
 ```
